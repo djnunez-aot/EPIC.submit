@@ -30,7 +30,7 @@ export const Route = createFileRoute(
   component: AddProjects,
 });
 
-function AddProjects() {
+export function AddProjects() {
   const navigate = useNavigate();
   const { accountId, proponentId, isLoading: isAccountLoading } = useAccount();
   const {
@@ -106,6 +106,7 @@ function AddProjects() {
           <Button
             variant="contained"
             color="primary"
+            data-cy="confirm-projects-button"
             onClick={onConfirmProjectsClick}
             disabled={!projects}
           >

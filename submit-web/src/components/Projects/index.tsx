@@ -5,6 +5,7 @@ import { Project } from "./Project";
 type ProjectsParams = {
   accountProjects: AccountProject[];
 };
+
 export const Projects = ({ accountProjects }: ProjectsParams) => {
   return (
     <Stack spacing={2} direction={"column"}>
