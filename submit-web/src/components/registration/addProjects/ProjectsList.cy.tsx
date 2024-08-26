@@ -3,7 +3,10 @@ import { AddProjects } from "../../../routes/_authenticated/registration/add-pro
 import { Project, AccountProject } from "../../../models/Project";
 import { AppConfig } from "../../../utils/config";
 import { setupIntercepts } from "../../../../cypress/support/utils";
-import { useNavigate } from "@tanstack/react-router";
+import { useAccount } from "../../../store/accountStore";
+import { mockZustandStore } from "../../../../cypress/support/utils";
+
+// This function replaces the Zustand store with a mock implementation
 
 const sampleProjects: Project[] = [
   {
@@ -85,8 +88,13 @@ const endpoints = [
 
 describe("Projects List", () => {
   beforeEach(() => {
+    mockZustandStore(useAccount, {
+      proponentId: 201,
+      accountId: "Account A",
+      isLoading: false,
+    });
     setupIntercepts(endpoints);
-    cy.mount(<AddProjects />);
+    cy.navigate("/projects");
   });
 
   it("should display the projects", () => {

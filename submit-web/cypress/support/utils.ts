@@ -14,3 +14,14 @@ export function setupIntercepts(endpoints: any[]) {
     cy.intercept(method, url, response).as(name);
   });
 }
+
+export const mockZustandStore = (storeModule, initialState) => {
+  const storeResetFn = storeModule.getState().reset;
+
+  storeModule.setState(initialState, true); // Reset the store state to initialState
+
+  // Clean up the mock after each test
+  return () => {
+    storeResetFn();
+  };
+};

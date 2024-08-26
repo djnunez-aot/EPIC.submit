@@ -16,6 +16,9 @@ import React from "react";
 // Alternatively, can be defined in cypress/support/component.d.ts
 // with a <reference path="./component" /> at the top of your spec.
 declare global {
+  interface Window {
+    __router: ReturnType<typeof createRouter>;
+  }
   namespace Cypress {
     interface Chainable {
       /**
@@ -24,6 +27,7 @@ declare global {
        * @param options Additional options to pass into mount
        */
       mount(component: React.ReactNode): Cypress.Chainable<MountReturn>;
+      navigate(to: string): Cypress.Chainable<void>;
     }
   }
 }
@@ -59,7 +63,54 @@ Cypress.Commands.add("mount", () => {
     </QueryClientProvider>
   );
 
-  return mount(wrapped);
+  // Mount the wrapped component and save the router to the window object
+  return mount(wrapped).then(() => {
+    cy.window().then((win) => {
+      win.__router = router;
+    });
+  });
+});
+
+Cypress.Commands.add("mount", () => {
+  const mockAuth = {
+    isAuthenticated: true,
+    user: { profile: { name: "Test User" } },
+    signoutRedirect: cy.stub(),
+    signinRedirect: cy.stub(),
+    // add other necessary mocks here
+  };
+
+  const wrapped = (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <AuthProvider {...OidcConfig}>
+          <RouterProvider
+            router={router}
+            context={{ authentication: mockAuth }}
+          />
+        </AuthProvider>
+      </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
+
+  // Mount the wrapped component and save the router to the window object
+  return mount(wrapped).then(() => {
+    cy.window().then((win) => {
+      win.__router = router;
+    });
+  });
+});
+
+Cypress.Commands.add("navigate", (to: string) => {
+  cy.mount().then(() => {
+    cy.window().then((win) => {
+      const router = win.__router; // Assuming the router was stored globally in the window object
+      if (router) {
+        router.navigate({ to });
+      }
+    });
+  });
 });
 // Example use:
 // cy.mount(<MyComponent />)
