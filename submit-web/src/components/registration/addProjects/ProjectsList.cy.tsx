@@ -1,88 +1,39 @@
-import React from "react";
-import { AddProjects } from "../../../routes/_authenticated/registration/add-projects";
-import { Project, AccountProject } from "../../../models/Project";
 import { AppConfig } from "../../../utils/config";
 import { setupIntercepts } from "../../../../cypress/support/utils";
 import { useAccount } from "../../../store/accountStore";
 import { mockZustandStore } from "../../../../cypress/support/utils";
-
-// This function replaces the Zustand store with a mock implementation
-
-const sampleProjects: Project[] = [
-  {
-    id: 1,
-    name: "Project Alpha",
-    proponent_id: 101,
-    proponent_name: "Proponent A",
-    ea_certificate: "EA-12345",
-  },
-  {
-    id: 2,
-    name: "Project Beta",
-    proponent_id: 101,
-    proponent_name: "Proponent B",
-  },
-  {
-    id: 3,
-    name: "Project Gamma",
-    proponent_id: 101,
-    proponent_name: "Proponent C",
-    ea_certificate: "EA-67890",
-  },
-];
-
-const sampleAccountProjects: AccountProject[] = [
-  {
-    id: 1,
-    project_id: 1,
-    account_id: 201,
-    project: sampleProjects[0],
-  },
-  {
-    id: 2,
-    project_id: 2,
-    account_id: 201,
-    project: sampleProjects[1],
-  },
-  {
-    id: 3,
-    project_id: 3,
-    account_id: 201,
-    project: sampleProjects[2],
-  },
-];
-
-const newProject: Project = {
-  id: 4,
-  name: "Project Delta",
-  proponent_id: 101,
-  proponent_name: "Proponent D",
-};
-
-const newAccountProject: AccountProject = {
-  id: 4,
-  project_id: 4,
-  account_id: 201,
-  project: newProject,
-};
+import {
+  mockAccountProjects,
+  mockProjects,
+  createMockAccountProject,
+} from "../../../../cypress/support/constants";
 
 const endpoints = [
   {
     name: "getProjectsOptions",
     method: "OPTIONS",
-    url: `${AppConfig.apiUrl}/projects/proponents/${sampleProjects[0].proponent_id}`,
+    url: `${AppConfig.apiUrl}/projects/proponents/${mockProjects[0].proponent_id}`,
   },
   {
     name: "getProjects",
     method: "GET",
-    url: `${AppConfig.apiUrl}/projects/proponents/${sampleProjects[0].proponent_id}`,
-    response: { body: sampleProjects },
+    url: `${AppConfig.apiUrl}/projects/proponents/${mockProjects[0].proponent_id}`,
+    response: { body: mockProjects },
   },
   {
     name: "addProjects",
     method: "POST",
-    url: `${AppConfig.apiUrl}/projects/accounts/${sampleAccountProjects[0].account_id}`,
-    response: { body: [sampleAccountProjects, newAccountProject] },
+    url: `${AppConfig.apiUrl}/projects/accounts/${mockAccountProjects[0].account_id}`,
+    response: {
+      body: [
+        mockAccountProjects,
+        createMockAccountProject(
+          mockAccountProjects[0].id,
+          mockAccountProjects[0].project_id,
+          mockAccountProjects[0].account_id
+        ),
+      ],
+    },
   },
 ];
 
@@ -110,7 +61,7 @@ describe("Projects List", () => {
     // Check that the projects were added
     cy.get(".MuiTable-root").should(
       "have.length",
-      sampleAccountProjects.length + 1
+      mockAccountProjects.length + 1
     );
   });
 });
