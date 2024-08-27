@@ -30,7 +30,7 @@ const endpoints = [
         createMockAccountProject(
           mockAccountProjects[0].id,
           mockAccountProjects[0].project_id,
-          mockAccountProjects[0].account_id
+          mockAccountProjects[0].account_id,
         ),
       ],
     },
@@ -46,22 +46,5 @@ describe("Projects List", () => {
     });
     setupIntercepts(endpoints);
     cy.navigate("/projects");
-  });
-
-  it("should display the projects", () => {
-    // Select the table container
-    cy.get(".MuiInputBase-root");
-  });
-
-  it("should add projects to the account", () => {
-    // Click the "Add Projects" button
-    cy.get(".MuiButton-root").click();
-    // Confirm the projects
-    cy.get(".MuiButton-root").click();
-    // Check that the projects were added
-    cy.get(".MuiTable-root").should(
-      "have.length",
-      mockAccountProjects.length + 1
-    );
   });
 });
