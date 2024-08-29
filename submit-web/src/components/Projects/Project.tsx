@@ -23,10 +23,10 @@ type ProjectParam = {
 };
 
 export const Project = ({ accountProject }: ProjectParam) => {
-  const activeSubmissionPackages = accountProject.packages.filter(
+  const activeSubmissionPackages = accountProject?.packages.filter(
     (subPackage) => subPackage.status === PACKAGE_STATUS.IN_REVIEW.value
   );
-  const pastSubmissionPackages = accountProject.packages.filter(
+  const pastSubmissionPackages = accountProject?.packages.filter(
     (subPackage) => subPackage.status !== PACKAGE_STATUS.IN_REVIEW.value
   );
 
