@@ -6,6 +6,7 @@ import { PROJECT_STATUS } from "../registration/addProjects/ProjectCard/constant
 import SubmissionPackageTable from "./ProjectTable";
 import { AccountProject } from "@/models/Project";
 import { PACKAGE_STATUS } from "@/models/Package";
+import { useNavigate } from "@tanstack/react-router";
 
 const HEADER_HEIGHT = 54;
 
@@ -23,20 +24,24 @@ type ProjectParam = {
 };
 
 export const Project = ({ accountProject }: ProjectParam) => {
-  const activeSubmissionPackages = accountProject?.packages.filter(
+  const navigate = useNavigate();
+
+  const activeSubmissionPackages = accountProject.packages.filter(
     (subPackage) => subPackage.status === PACKAGE_STATUS.IN_REVIEW.value
   );
-  const pastSubmissionPackages = accountProject?.packages.filter(
+  const pastSubmissionPackages = accountProject.packages.filter(
     (subPackage) => subPackage.status !== PACKAGE_STATUS.IN_REVIEW.value
   );
 
   const { name, ea_certificate } = accountProject.project;
 
+  const handleNewSubmission = () => {
+    navigate({ to: `/projects/${accountProject.id}/new-submission` });
+  };
   return (
     <Paper
       sx={{
-        width: "90%",
-        height: "100%",
+        width: "auto",
         borderRadius: "6px",
       }}
       elevation={2}
@@ -95,10 +100,10 @@ export const Project = ({ accountProject }: ProjectParam) => {
               <Typography variant="h4" fontWeight={400}>
                 Management Plans
               </Typography>
-              <ProjectStatus bold status={PROJECT_STATUS.POST_DECISION} />
+              <ProjectStatus status={PROJECT_STATUS.POST_DECISION} />
             </CardInnerBox>
             <CardInnerBox>
-              <Button>
+              <Button onClick={handleNewSubmission}>
                 <AddIcon sx={{ p: 0, mr: 0.5 }} />
                 New Submission
               </Button>

@@ -63,7 +63,7 @@ export const useGetProjects = ({
 };
 
 type GetProjectsByIdParams = {
-  projectId?: number;
+  projectId: number;
 };
 const getProjectById = ({ projectId }: GetProjectsByIdParams) => {
   return request<AccountProject>({
