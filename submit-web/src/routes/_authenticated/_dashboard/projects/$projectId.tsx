@@ -5,7 +5,6 @@ import { useParams } from "@tanstack/react-router";
 import { Project as ProjectComponent } from "@/components/Projects/Project";
 import { Container } from "@mui/material";
 import { ProjectsSkeleton } from "@/components/Projects";
-import { useAccount } from "@/store/accountStore";
 
 export const Route = createFileRoute(
   "/_authenticated/_dashboard/projects/$projectId"
@@ -20,9 +19,7 @@ export const Route = createFileRoute(
 function ProjectPage() {
   const { projectId: projectIdParam } = useParams({ strict: false });
   const projectId = Number(projectIdParam);
-  const { accountId } = useAccount();
   const { data, isError, error, isLoading } = useGetProject({
-    accountId,
     projectId,
   });
   const project = data as AccountProject;

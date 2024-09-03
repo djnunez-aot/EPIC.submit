@@ -36,12 +36,11 @@ class ProjectQueries:
         return result
 
     @classmethod
-    def get_project_by_id(cls, account_id: int, project_id: int):
+    def get_project_by_id(cls, project_id: int):
         """Find account project by account_id and project_id"""
         result = (
             db.session.query(AccountProject)
             .filter(
-                AccountProject.account_id == account_id,
                 AccountProject.project_id == project_id,
             )
             .join(Project)
