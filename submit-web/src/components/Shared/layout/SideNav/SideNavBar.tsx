@@ -1,12 +1,8 @@
 import { Box, List } from "@mui/material";
-import EntityRoutes from "./EntityRoutes";
-import EAORoutes from "./EAORoutes";
-import { Else, If, Then } from "react-if";
+import { MainListItem } from "./MainListItem";
+import ProjectsSubRoutes from "./ProjectsSubRoutes";
 
 export default function SideNavBar() {
-  // TODO: Replace this with actual user role check
-  const isEntityUser = !true; // Example: replace with a real role check
-
   return (
     <div style={{ height: "100%" }}>
       <Box
@@ -20,14 +16,19 @@ export default function SideNavBar() {
         }}
       >
         <List>
-          <If condition={isEntityUser}>
-            <Then>
-              <EntityRoutes />
-            </Then>
-            <Else>
-              <EAORoutes />
-            </Else>
-          </If>
+          <MainListItem
+            route={{
+              name: "All Projects",
+              path: "/projects",
+            }}
+          />
+          <ProjectsSubRoutes />
+          <MainListItem
+            route={{
+              name: "Admin",
+              path: "/profile",
+            }}
+          />
         </List>
       </Box>
     </div>
