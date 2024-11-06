@@ -1,11 +1,11 @@
 import { PageGrid } from "@/components/Shared/PageGrid";
 import { Grid } from "@mui/material";
 import { createFileRoute, Navigate, useParams } from "@tanstack/react-router";
-import { Project as ProjectComponent } from "@/components/Projects/Project";
+import { Project as ProjectComponent } from "@/components/Projects/proponent/Project";
 import { useGetAccountProject } from "@/hooks/api/useProjects";
 
 export const Route = createFileRoute(
-  "/proponent/_proponentLayout/_dashboard/projects/$projectId/_projectLayout/",
+  "/proponent/_proponentLayout/_dashboard/projects/$projectId/_projectLayout/"
 )({
   component: ProjectPage,
   notFoundComponent: () => {

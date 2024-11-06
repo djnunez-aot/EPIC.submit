@@ -13,7 +13,7 @@ import { Navigate, useNavigate, useParams } from "@tanstack/react-router";
 import { SUBMISSION_STATUS, SUBMISSION_TYPE } from "@/models/Submission";
 import ControlledInputMask from "@/components/Shared/controlled/ControlledInputMask";
 import BarTitle from "@/components/Shared/Text/BarTitle";
-import { CardInnerBox } from "@/components/Projects/Project";
+import { CardInnerBox } from "@/components/Projects/proponent/Project";
 import { ProjectStatus } from "@/components/registration/addProjects/ProjectStatus";
 import { PROJECT_STATUS } from "@/components/registration/addProjects/ProjectCard/constants";
 import { useGetAccountProject } from "@/hooks/api/useProjects";
@@ -76,7 +76,7 @@ export const ContactInformation = () => {
   const navigate = useNavigate();
 
   const formSubmission = submissionItem?.submissions.find(
-    (submission) => submission.type === SUBMISSION_TYPE.FORM,
+    (submission) => submission.type === SUBMISSION_TYPE.FORM
   );
   const defaultValues = useMemo(() => {
     if (!formSubmission?.submitted_form?.submission_json) return {};

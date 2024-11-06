@@ -20,9 +20,9 @@ import { Route as IndexImport } from './routes/index'
 import { Route as OidcCallbackIndexImport } from './routes/oidc-callback/index'
 import { Route as StaffStaffLayoutImport } from './routes/staff/_staffLayout'
 import { Route as ProponentProponentLayoutImport } from './routes/proponent/_proponentLayout'
-import { Route as StaffStaffLayoutProjectsImport } from './routes/staff/_staffLayout/projects'
 import { Route as ProponentProponentLayoutAdminLoginImport } from './routes/proponent/_proponentLayout/admin-login'
 import { Route as ProponentProponentLayoutDashboardImport } from './routes/proponent/_proponentLayout/_dashboard'
+import { Route as StaffStaffLayoutProjectsIndexImport } from './routes/staff/_staffLayout/projects/index'
 import { Route as ProponentProponentLayoutRegistrationCreateAccountImport } from './routes/proponent/_proponentLayout/registration/create-account'
 import { Route as ProponentProponentLayoutRegistrationCompleteImport } from './routes/proponent/_proponentLayout/registration/complete'
 import { Route as ProponentProponentLayoutDashboardProfileImport } from './routes/proponent/_proponentLayout/_dashboard/profile'
@@ -97,11 +97,6 @@ const ProponentProponentLayoutRoute = ProponentProponentLayoutImport.update({
   getParentRoute: () => ProponentRoute,
 } as any)
 
-const StaffStaffLayoutProjectsRoute = StaffStaffLayoutProjectsImport.update({
-  path: '/projects',
-  getParentRoute: () => StaffStaffLayoutRoute,
-} as any)
-
 const ProponentProponentLayoutAdminLoginRoute =
   ProponentProponentLayoutAdminLoginImport.update({
     path: '/admin-login',
@@ -112,6 +107,12 @@ const ProponentProponentLayoutDashboardRoute =
   ProponentProponentLayoutDashboardImport.update({
     id: '/_dashboard',
     getParentRoute: () => ProponentProponentLayoutRoute,
+  } as any)
+
+const StaffStaffLayoutProjectsIndexRoute =
+  StaffStaffLayoutProjectsIndexImport.update({
+    path: '/projects/',
+    getParentRoute: () => StaffStaffLayoutRoute,
   } as any)
 
 const ProponentProponentLayoutDashboardAboutpageLazyRoute =
@@ -296,13 +297,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProponentProponentLayoutAdminLoginImport
       parentRoute: typeof ProponentProponentLayoutImport
     }
-    '/staff/_staffLayout/projects': {
-      id: '/staff/_staffLayout/projects'
-      path: '/projects'
-      fullPath: '/staff/projects'
-      preLoaderRoute: typeof StaffStaffLayoutProjectsImport
-      parentRoute: typeof StaffStaffLayoutImport
-    }
     '/proponent/_proponentLayout/_dashboard/profile': {
       id: '/proponent/_proponentLayout/_dashboard/profile'
       path: '/profile'
@@ -330,6 +324,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/proponent/aboutpage'
       preLoaderRoute: typeof ProponentProponentLayoutDashboardAboutpageLazyImport
       parentRoute: typeof ProponentProponentLayoutDashboardImport
+    }
+    '/staff/_staffLayout/projects/': {
+      id: '/staff/_staffLayout/projects/'
+      path: '/projects'
+      fullPath: '/staff/projects'
+      preLoaderRoute: typeof StaffStaffLayoutProjectsIndexImport
+      parentRoute: typeof StaffStaffLayoutImport
     }
     '/proponent/_proponentLayout/_dashboard/projects/': {
       id: '/proponent/_proponentLayout/_dashboard/projects/'
@@ -443,7 +444,7 @@ export const routeTree = rootRoute.addChildren({
   }),
   StaffRoute: StaffRoute.addChildren({
     StaffStaffLayoutRoute: StaffStaffLayoutRoute.addChildren({
-      StaffStaffLayoutProjectsRoute,
+      StaffStaffLayoutProjectsIndexRoute,
     }),
   }),
   OidcCallbackIndexRoute,
@@ -504,7 +505,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "staff/_staffLayout.tsx",
       "parent": "/staff",
       "children": [
-        "/staff/_staffLayout/projects"
+        "/staff/_staffLayout/projects/"
       ]
     },
     "/oidc-callback/": {
@@ -524,10 +525,6 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "proponent/_proponentLayout/admin-login.tsx",
       "parent": "/proponent/_proponentLayout"
     },
-    "/staff/_staffLayout/projects": {
-      "filePath": "staff/_staffLayout/projects.tsx",
-      "parent": "/staff/_staffLayout"
-    },
     "/proponent/_proponentLayout/_dashboard/profile": {
       "filePath": "proponent/_proponentLayout/_dashboard/profile.tsx",
       "parent": "/proponent/_proponentLayout/_dashboard"
@@ -543,6 +540,10 @@ export const routeTree = rootRoute.addChildren({
     "/proponent/_proponentLayout/_dashboard/aboutpage": {
       "filePath": "proponent/_proponentLayout/_dashboard/aboutpage.lazy.tsx",
       "parent": "/proponent/_proponentLayout/_dashboard"
+    },
+    "/staff/_staffLayout/projects/": {
+      "filePath": "staff/_staffLayout/projects/index.tsx",
+      "parent": "/staff/_staffLayout"
     },
     "/proponent/_proponentLayout/_dashboard/projects/": {
       "filePath": "proponent/_proponentLayout/_dashboard/projects/index.tsx",

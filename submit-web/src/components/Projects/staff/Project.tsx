@@ -1,13 +1,14 @@
 import { Box, Button, Divider, styled, Typography } from "@mui/material";
 import { BCDesignTokens } from "epic.theme";
 import AddIcon from "@mui/icons-material/Add";
-import { ProjectStatus } from "../registration/addProjects/ProjectStatus";
-import { PROJECT_STATUS } from "../registration/addProjects/ProjectCard/constants";
-import SubmissionPackageTable from "./ProjectTable";
+import { ProjectStatus } from "../../registration/addProjects/ProjectStatus";
+import { PROJECT_STATUS } from "../../registration/addProjects/ProjectCard/constants";
+import SubmissionPackageTable from "./StaffProjectTable";
 import { AccountProject } from "@/models/Project";
 import { PACKAGE_STATUS } from "@/models/Package";
 import { useNavigate } from "@tanstack/react-router";
-import { ContentBox } from "../Shared/ContentBox";
+import { ContentBox } from "../../Shared/ContentBox";
+import StaffSubmissionPackageTable from "./StaffProjectTable";
 
 export const CardInnerBox = styled(Box)({
   display: "flex",
@@ -22,7 +23,7 @@ type ProjectParam = {
   accountProject: AccountProject;
 };
 
-export const Project = ({ accountProject }: ProjectParam) => {
+export const StaffProject = ({ accountProject }: ProjectParam) => {
   const navigate = useNavigate();
 
   const activeSubmissionPackages = accountProject.packages.filter(
@@ -30,15 +31,15 @@ export const Project = ({ accountProject }: ProjectParam) => {
       !subPackage.status.some(
         (status) =>
           status === PACKAGE_STATUS.APPROVED.value ||
-          status === PACKAGE_STATUS.REJECTED.value,
-      ),
+          status === PACKAGE_STATUS.REJECTED.value
+      )
   );
   const pastSubmissionPackages = accountProject.packages.filter((subPackage) =>
     subPackage.status.some(
       (status) =>
         status === PACKAGE_STATUS.APPROVED.value ||
-        status === PACKAGE_STATUS.REJECTED.value,
-    ),
+        status === PACKAGE_STATUS.REJECTED.value
+    )
   );
 
   const { name, ea_certificate } = accountProject.project;
@@ -131,7 +132,7 @@ export const Project = ({ accountProject }: ProjectParam) => {
           <CardInnerBox
             sx={{ height: "100%", py: BCDesignTokens.layoutPaddingMedium }}
           >
-            <SubmissionPackageTable
+            <StaffSubmissionPackageTable
               headless
               onSubmissionClick={handleOnSubmissionClick}
               submissionPackages={pastSubmissionPackages}

@@ -3,16 +3,15 @@ import { Grid } from "@mui/material";
 import { useGetAccountProjects } from "@/hooks/api/useProjects";
 import { useAccount } from "@/store/accountStore";
 import { Else, If, Then } from "react-if";
-import { Projects, ProjectsSkeleton } from "@/components/Projects/proponent";
+import { StaffProjects } from "@/components/Projects/staff";
 import { useEffect } from "react";
 import { notify } from "@/components/Shared/Snackbar/snackbarStore";
 import { PageGrid } from "@/components/Shared/PageGrid";
 import ProjectFilters from "@/components/Filters/ProjectFilters";
 import { useProjectFilters } from "@/components/Filters/projectFilterStore";
+import { ProjectsSkeleton } from "@/components/Projects/proponent";
 
-export const Route = createFileRoute(
-  "/proponent/_proponentLayout/_dashboard/projects/"
-)({
+export const Route = createFileRoute("/staff/_staffLayout/projects/")({
   component: ProjectsPage,
   meta: () => [{ title: "All Projects" }],
 });
@@ -25,7 +24,7 @@ export function ProjectsPage() {
     isPending: isProjectsLoading,
     isError: isProjectsError,
   } = useGetAccountProjects({
-    accountId,
+    accountId: 1,
     searchOptions: filters,
   });
 
@@ -48,7 +47,7 @@ export function ProjectsPage() {
             <ProjectsSkeleton />
           </Then>
           <Else>
-            <Projects accountProjects={projectsData} />
+            <StaffProjects accountProjects={projectsData} />
           </Else>
         </If>
       </Grid>

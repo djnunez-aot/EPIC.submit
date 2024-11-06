@@ -9,7 +9,7 @@ import {
 import { BCDesignTokens } from "epic.theme";
 import { SubmissionPackage } from "@/models/Package";
 import ProjectTableRow from "./ProjectTableRow";
-import { StyledTableHeadCell } from "../Shared/Table/common";
+import { StyledTableHeadCell } from "../../Shared/Table/common";
 
 export default function SubmissionPackageTable({
   submissionPackages,

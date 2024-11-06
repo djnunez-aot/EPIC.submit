@@ -3,7 +3,7 @@ import { Link, TableCell, TableRow, Typography } from "@mui/material";
 import { BCDesignTokens } from "epic.theme";
 import { SubmissionPackage } from "@/models/Package";
 import dayjs from "dayjs";
-import { PackageStatusChipStack } from "../PackageStatusChip/PackageStatusChipStack";
+import { PackageStatusChipStack } from "../../PackageStatusChip/PackageStatusChipStack";
 
 interface ProjectRowProps {
   subPackage: SubmissionPackage;
