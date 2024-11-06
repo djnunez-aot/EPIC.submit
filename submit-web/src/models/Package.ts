@@ -59,3 +59,15 @@ export type SubmissionPackage = {
   items: Array<SubmissionItem>;
   account_project_id: number;
 };
+
+export type StaffSubmissionPackage = {
+  id: number;
+  name: string;
+  type: PackageType;
+  status: PackageStatus[];
+  submitted_on?: string;
+  submitted_by?: string;
+  items: SubmissionItem[];
+  days_since_submission?: number;
+  meta?: Record<string, any>;
+};

@@ -1,12 +1,12 @@
 import { ArrowForwardIos } from "@mui/icons-material";
 import { Link, TableCell, TableRow, Typography } from "@mui/material";
 import { BCDesignTokens } from "epic.theme";
-import { SubmissionPackage } from "@/models/Package";
+import { StaffSubmissionPackage } from "@/models/Package";
 import dayjs from "dayjs";
 import { PackageStatusChipStack } from "../../PackageStatusChip/PackageStatusChipStack";
 
 interface StaffProjectRowProps {
-  subPackage: SubmissionPackage;
+  subPackage: StaffSubmissionPackage;
   onSubmissionClick: (submissionId: number) => void;
 }
 const border = `1px solid ${BCDesignTokens.surfaceColorBorderDefault}`;
@@ -65,6 +65,16 @@ export default function StaffProjectTableRow({
             py: BCDesignTokens.layoutPaddingXsmall,
           }}
         >
+          {subPackage.type.name}
+        </TableCell>
+        <TableCell
+          align="right"
+          sx={{
+            borderTop: border,
+            borderBottom: border,
+            py: BCDesignTokens.layoutPaddingXsmall,
+          }}
+        >
           {subPackage.submitted_on
             ? dayjs(subPackage.submitted_on).format("DD-MMM-YYYY")
             : "--"}
@@ -77,7 +87,27 @@ export default function StaffProjectTableRow({
             py: BCDesignTokens.layoutPaddingXsmall,
           }}
         >
-          {subPackage.submitted_by ?? "--"}
+          {subPackage.days_since_submission ?? "--"}
+        </TableCell>
+        <TableCell
+          align="right"
+          sx={{
+            borderTop: border,
+            borderBottom: border,
+            py: BCDesignTokens.layoutPaddingXsmall,
+          }}
+        >
+          {subPackage.days_since_submission ?? "--"}
+        </TableCell>
+        <TableCell
+          align="right"
+          sx={{
+            borderTop: border,
+            borderBottom: border,
+            py: BCDesignTokens.layoutPaddingXsmall,
+          }}
+        >
+          {subPackage.days_since_submission ?? "--"}
         </TableCell>
         <TableCell
           align="center"

@@ -10,6 +10,7 @@ import { PageGrid } from "@/components/Shared/PageGrid";
 import ProjectFilters from "@/components/Filters/ProjectFilters";
 import { useProjectFilters } from "@/components/Filters/projectFilterStore";
 import { ProjectsSkeleton } from "@/components/Projects/proponent";
+import { useGetStaffProjects } from "@/hooks/api/useStaffProjects";
 
 export const Route = createFileRoute("/staff/_staffLayout/projects/")({
   component: ProjectsPage,
@@ -17,14 +18,12 @@ export const Route = createFileRoute("/staff/_staffLayout/projects/")({
 });
 
 export function ProjectsPage() {
-  const { accountId } = useAccount();
   const { filters } = useProjectFilters();
   const {
     data: projectsData,
     isPending: isProjectsLoading,
     isError: isProjectsError,
-  } = useGetAccountProjects({
-    accountId: 1,
+  } = useGetStaffProjects({
     searchOptions: filters,
   });
 
