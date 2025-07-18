@@ -1,6 +1,9 @@
 import { SubmissionPackage } from "../../../src/models/Package";
 import { AccountProject } from "../../../src/models/Project";
-import { EPIC_SUBMIT_ROLE } from "../../../src/models/Role";
+import {
+  ACCOUNT_USER_PERMISSIONS,
+  EPIC_SUBMIT_ROLE,
+} from "../../../src/models/Role";
 import {
   Submission,
   SUBMISSION_ITEM_STATUS,
@@ -9,7 +12,7 @@ import {
   SUBMISSION_ITEM_TYPE,
   SubmissionItemMethod,
 } from "../../../src/models/SubmissionItem";
-import { USER_TYPE } from "../../../src/models/User";
+import { User, USER_TYPE } from "../../../src/models/User";
 
 export const mockConsultationRecordDocument: Submission = {
   created_date: "2025-04-29T14:24:36.093429",
@@ -125,6 +128,104 @@ export const mockManagementPlan = {
   version: 1,
 };
 
+import { USER_MANAGEMENT_ROLE } from "../../../src/models/Role";
+import { AccountUserWithRole } from "../../../src/models/AccountUser";
+
+export const mockInternalStaffDocuments: InternalStaffDocument[] = [
+  {
+    id: 1,
+    name: "Internal Memo - CEMP Review",
+    url: "https://example.com/documents/internal-memo.pdf",
+    type: "S3",
+    item_id: 101,
+    created_by: "Jane Doe",
+    created_date: "2025-05-02T09:30:00.000Z",
+    created_by_user: {
+      id: 1,
+      auth_guid: "staff-user-guid-1",
+      type: "STAFF",
+      account_user: {
+        id: 11,
+        account_id: 201,
+        first_name: "Jane",
+        last_name: "Doe",
+        full_name: "Jane Doe",
+        position: "Environmental Analyst",
+        work_email_address: "jane.doe@example.com",
+        work_contact_number: "123-456-7890",
+        account: {
+          id: 201,
+          proponent_id: 88,
+        },
+        role: {
+          account_project_id: null,
+          account_user_id: 11,
+          package_ids: [],
+          original_package_ids: [],
+          package_names: [],
+          role_id: 1,
+          role_name: USER_MANAGEMENT_ROLE.PROJECT_ADMIN,
+          permissions: ["read", "write"],
+        },
+        has_agreed_to_terms: true,
+      },
+      staff_user: {
+        id: 31,
+        first_name: "Jane",
+        last_name: "Doe",
+        work_email_address: "jane.doe@example.com",
+        user_id: 1,
+      },
+    },
+  },
+  {
+    id: 2,
+    name: "Internal Checklist - MP Submission",
+    url: "https://example.com/documents/internal-checklist.pdf",
+    type: "S3",
+    item_id: 102,
+    created_by: "John Smith",
+    created_date: "2025-05-03T11:45:00.000Z",
+    created_by_user: {
+      id: 2,
+      auth_guid: "staff-user-guid-2",
+      type: "STAFF",
+      account_user: {
+        id: 12,
+        account_id: 202,
+        first_name: "John",
+        last_name: "Smith",
+        full_name: "John Smith",
+        position: "Compliance Officer",
+        work_email_address: "john.smith@example.com",
+        work_contact_number: "987-654-3210",
+        account: {
+          id: 202,
+          proponent_id: 89,
+        },
+        role: {
+          account_project_id: null,
+          account_user_id: 12,
+          package_ids: [],
+          original_package_ids: [],
+          package_names: [],
+          role_id: 2,
+          role_name: USER_MANAGEMENT_ROLE.SUBMISSION_ADMIN,
+          permissions: ["read", "write", "approve"],
+        },
+        has_agreed_to_terms: true,
+      },
+      staff_user: {
+        id: 32,
+        first_name: "John",
+        last_name: "Smith",
+        work_email_address: "john.smith@example.com",
+        user_id: 2,
+      },
+    },
+  },
+];
+
 export const mockSubmissionPackage: SubmissionPackage = {
   account_project_id: 115,
   completed_on: undefined,
@@ -231,10 +332,80 @@ export const mockAuthentication = {
   revokeTokens: () => Promise.resolve(),
 };
 
+export const mockProponentAuthentication = {
+  isAuthenticated: true,
+  user: {
+    profile: {
+      name: "Test User",
+      identity_provider: "bceid",
+      sub: "test-sub",
+      iss: "https://test-issuer",
+      aud: "test-audience",
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      iat: Math.floor(Date.now() / 1000),
+    },
+    access_token: "test_access_token",
+    session_state: "mock_session_state",
+    token_type: "Bearer",
+    state: {},
+    expires_in: 3600,
+    scope: "openid profile",
+    id_token: "mock_id_token",
+    refresh_token: "mock_refresh_token",
+    expired: false,
+    scopes: ["openid", "profile"],
+    toStorageString: () => "",
+  },
+  signoutRedirect: () => Promise.resolve(),
+  signinRedirect: () => Promise.resolve(),
+  isLoading: false,
+  // Mock required AuthContextProps properties
+  settings: {
+    authority: "https://test-issuer",
+    client_id: "test-client-id",
+    redirect_uri: "http://localhost/callback",
+  },
+  events: {} as any,
+  clearStaleState: () => Promise.resolve(),
+  removeUser: () => Promise.resolve(),
+  signoutSilent: () => Promise.resolve(),
+  signinSilent: () => Promise.resolve(null),
+  signinPopup: () =>
+    Promise.resolve({
+      profile: { name: "Test User", identity_provider: "bceid" },
+      expired: false,
+      scopes: ["openid", "profile"],
+      toStorageString: () => "",
+    } as any),
+  signoutPopup: () => Promise.resolve(),
+  startSilentRenew: () => Promise.resolve(),
+  stopSilentRenew: () => Promise.resolve(),
+  error: undefined,
+  // Add missing AuthContextProps properties
+  signinResourceOwnerCredentials: () =>
+    Promise.resolve({
+      profile: { name: "Test User", identity_provider: "bceid" },
+      expired: false,
+      scopes: ["openid", "profile"],
+      toStorageString: () => "",
+    } as any),
+  querySessionStatus: () => Promise.resolve(null),
+  revokeTokens: () => Promise.resolve(),
+};
+
 export const mockAccount = {
   isLoading: false,
   userType: USER_TYPE.STAFF,
   roles: [EPIC_SUBMIT_ROLE.eao_view],
+};
+
+export const mockProponentAccount = {
+  accountId: 1,
+  userId: 1,
+  proponentId: 1,
+  isLoading: false,
+  userType: USER_TYPE.PROPONENT,
+  roles: [ACCOUNT_USER_PERMISSIONS.INVITE_USERS],
 };
 
 export const mockActivityLogs = [
@@ -389,3 +560,98 @@ export const mockActivityLogs = [
     visibility: "STAFF",
   },
 ];
+
+export const mockAccountUsersWithRoles: AccountUserWithRole[] = [
+  {
+    id: 101,
+    account_id: 5001,
+    first_name: "Alice",
+    last_name: "Johnson",
+    full_name: "Alice Johnson",
+    position: "Project Manager",
+    work_email_address: "alice.johnson@example.com",
+    work_contact_number: "+1-555-123-4567",
+    account: {
+      id: 5001,
+      proponent_id: 3001,
+    },
+    status: "ACTIVE",
+    invitation_id: 9001,
+    user_id: 1001,
+    role: {
+      account_project_id: 7001,
+      account_user_id: 101,
+      package_ids: [1, 2],
+      original_package_ids: [1],
+      package_names: ["Project Management Package", "Reporting Package"],
+      role_id: 1,
+      role_name: USER_MANAGEMENT_ROLE.PROJECT_ADMIN,
+      permissions: [ACCOUNT_USER_PERMISSIONS.CREATE_PACKAGE],
+    },
+  },
+  {
+    id: 102,
+    account_id: 5001,
+    first_name: "Bob",
+    last_name: "Smith",
+    full_name: "Bob Smith",
+    position: "Environmental Analyst",
+    work_email_address: "bob.smith@example.com",
+    work_contact_number: "+1-555-765-4321",
+    account: {
+      id: 5001,
+      proponent_id: 3001,
+    },
+    status: "PENDING",
+    invitation_id: 9002,
+    user_id: null,
+    role: {
+      account_project_id: null,
+      account_user_id: 102,
+      package_ids: [3],
+      original_package_ids: [3],
+      package_names: ["Submission Review Package"],
+      role_id: 2,
+      role_name: USER_MANAGEMENT_ROLE.SPECIFIC_SUBMISSION_CONTRIBUTOR,
+      permissions: [ACCOUNT_USER_PERMISSIONS.CREATE_PACKAGE],
+    },
+  },
+];
+
+export const mockProponentUser: User = {
+  id: 1,
+  auth_guid: "PROPONENT_GUID",
+  type: USER_TYPE.PROPONENT,
+  account_user: {
+    id: 11,
+    account_id: 201,
+    first_name: "Jane",
+    last_name: "Doe",
+    full_name: "Jane Doe",
+    position: "Environmental Analyst",
+    work_email_address: "jane.doe@example.com",
+    work_contact_number: "123-456-7890",
+    account: {
+      id: 201,
+      proponent_id: 88,
+    },
+    role: {
+      account_project_id: null,
+      account_user_id: 11,
+      package_ids: [],
+      original_package_ids: [],
+      package_names: [],
+      role_id: 1,
+      role_name: USER_MANAGEMENT_ROLE.PROJECT_ADMIN,
+      permissions: [ACCOUNT_USER_PERMISSIONS.INVITE_USERS],
+    },
+    has_agreed_to_terms: true,
+  },
+  staff_user: {
+    id: 31,
+    first_name: "Jane",
+    last_name: "Doe",
+    work_email_address: "jane.doe@example.com",
+    user_id: 1,
+  },
+};
